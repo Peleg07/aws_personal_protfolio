@@ -59,3 +59,5 @@ The pipeline is triggered automatically on every push to `main`:
 2. **Test** — CodeBuild runs an HTML validation check against `index.html`; the pipeline halts if the file is malformed
 3. **Build** — CodeBuild syncs the site files to the S3 bucket
 4. **Invalidate** — CloudFront cache is invalidated so changes go live immediately
+
+<img width="1448" height="1086" alt="architecture" src="docs/codepipeline.png" />
