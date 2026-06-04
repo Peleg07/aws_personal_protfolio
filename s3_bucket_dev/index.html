@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Simple Website</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #f4f6f8;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #1f2937;
+      color: white;
+      padding: 20px 40px;
+      text-align: center;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 12px;
+      font-weight: bold;
+    }
+
+    .hero {
+      padding: 80px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      max-width: 700px;
+      margin: 0 auto 25px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: white;
+      color: #2563eb;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    section {
+      padding: 50px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    section h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 30px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      text-align: center;
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      color: #2563eb;
+    }
+
+    .about {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    }
+
+    footer {
+      background: #1f2937;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      nav a {
+        display: block;
+        margin: 8px 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>My Website</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Welcome to My Simple Website</h1>
+      <p>
+        This is a clean and responsive static website built with only HTML and CSS.
+        You can deploy it easily on AWS S3, CloudFront, GitHub Pages, or any static hosting service.
+      </p>
+      <a href="#contact" class="btn">Contact Me</a>
+    </section>
+
+    <section id="about">
+      <h2>About</h2>
+      <div class="about">
+        <p>
+          Hello! This is a simple website template. You can customize this section
+          with information about yourself, your project, your business, or your portfolio.
+        </p>
+      </div>
+    </section>
+
+    <section id="services">
+      <h2>Services</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Web Design</h3>
+          <p>Simple, clean, and responsive website design.</p>
+        </div>
+
+        <div class="card">
+          <h3>Cloud Hosting</h3>
+          <p>Deploy static websites using AWS S3 and CloudFront.</p>
+        </div>
+
+        <div class="card">
+          <h3>Automation</h3>
+          <p>Automate infrastructure and deployment using Terraform and CI/CD.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <div class="about">
+        <p>Email: example@email.com</p>
+        <p>LinkedIn: https://www.linkedin.com/in/your-profile</p>
+        <p>GitHub: https://github.com/your-username</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 My Website. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
