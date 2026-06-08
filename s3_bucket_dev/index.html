@@ -6,536 +6,575 @@
 <title>Peleg Levy — DevOps Engineer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:        #0a0f1e;
-  --bg2:       #0d1428;
-  --bg3:       #111d38;
-  --surface:   rgba(255,255,255,0.04);
-  --border:    rgba(255,255,255,0.08);
-  --border2:   rgba(0,212,255,0.25);
-  --blue:      #0066ff;
-  --cyan:      #00d4ff;
-  --grad:      linear-gradient(135deg,#00d4ff,#0066ff);
-  --grad2:     linear-gradient(135deg,#0066ff,#6600ff);
-  --text:      #f0f4ff;
-  --text2:     rgba(240,244,255,.65);
-  --text3:     rgba(240,244,255,.38);
-  --glow:      rgba(0,212,255,.18);
-  --glow2:     rgba(0,102,255,.12);
-  --font:      'Inter', system-ui, sans-serif;
-  --ease:      cubic-bezier(.22,1,.36,1);
-  --r:         14px;
+:root{
+  --bg:    #04050c;
+  --bg2:   #07091a;
+  --bg3:   #0c1028;
+  --bg4:   #111830;
+  --glass: rgba(11,16,36,0.72);
+  --bdr:   rgba(59,130,246,0.10);
+  --bdr2:  rgba(59,130,246,0.30);
+  --bdr3:  rgba(6,182,212,0.25);
+  --blue:  #3b82f6;
+  --blue2: #60a5fa;
+  --cyan:  #06b6d4;
+  --cyan2: #22d3ee;
+  --purple:#7c3aed;
+  --green: #10b981;
+  --gbg:   rgba(16,185,129,0.08);
+  --gbdr:  rgba(16,185,129,0.25);
+  --grad:  linear-gradient(135deg,#3b82f6,#06b6d4);
+  --grad2: linear-gradient(135deg,#7c3aed,#3b82f6);
+  --text:  #e8ecf6;
+  --text2: rgba(232,236,246,.60);
+  --text3: rgba(232,236,246,.28);
+  --syne:  'Barlow Semi Condensed',system-ui,sans-serif;
+  --sans:  'DM Sans',system-ui,sans-serif;
+  --ease:  cubic-bezier(.22,1,.36,1);
+  --r:     14px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;font-size:16px}
-body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;-webkit-user-select:none;-moz-user-select:none;user-select:none}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  -webkit-user-select:none;
+  user-select:none;
+}
 a{text-decoration:none;color:inherit}
 img{display:block;max-width:100%}
 
-/* ─── NAV ───────────────────────────────────────────────── */
+/* Noise texture overlay */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  pointer-events:none;z-index:0;
+  opacity:.028;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px;
+}
+
+/* Custom cursor */
+#cur{
+  position:fixed;width:10px;height:10px;border-radius:50%;
+  background:var(--cyan);pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform .08s,width .2s,height .2s,opacity .2s;
+  mix-blend-mode:screen;
+}
+#cur2{
+  position:fixed;width:36px;height:36px;border-radius:50%;
+  border:1.5px solid rgba(59,130,246,0.45);pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:transform .22s var(--ease),width .3s,height .3s;
+}
+
+/* ═══ NAV ══════════════════════════════════════════════ */
 #nav{
-  position:fixed;top:0;left:0;right:0;z-index:900;
-  height:68px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 52px;
-  transition:background .3s,border-color .3s;
+  position:fixed;top:0;left:0;right:0;z-index:800;
+  height:64px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 56px;
   border-bottom:1px solid transparent;
+  transition:background .4s,border-color .4s;
 }
 #nav.scrolled{
-  background:rgba(10,15,30,.88);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-bottom-color:var(--border);
+  background:rgba(4,5,12,.88);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom-color:var(--bdr);
 }
-.nav-logo{
-  font-weight:800;font-size:19px;letter-spacing:-.4px;
+.nav-brand{
+  font-family:var(--syne);font-weight:800;font-size:20px;letter-spacing:-0.5px;
   background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .nav-links{display:flex;gap:4px;list-style:none}
 .nav-links a{
-  font-size:13.5px;font-weight:500;color:var(--text2);
+  font-size:13px;font-weight:500;color:var(--text3);
   padding:7px 16px;border-radius:99px;
-  transition:color .2s,background .2s;letter-spacing:.1px;
+  transition:color .2s,background .2s;
 }
-.nav-links a:hover,.nav-links a.active{color:var(--text);background:rgba(255,255,255,.07)}
+.nav-links a:hover,.nav-links a.active{color:var(--text);background:rgba(59,130,246,0.1)}
 .nav-cta{
-  padding:9px 22px;border-radius:99px;
+  padding:9px 24px;border-radius:99px;
   background:var(--grad);color:#fff!important;
   font-weight:600!important;font-size:13px!important;
-  box-shadow:0 0 20px rgba(0,102,255,.35);
-  transition:box-shadow .2s,transform .2s;
+  box-shadow:0 0 24px rgba(59,130,246,0.3);
+  transition:box-shadow .25s,transform .25s;
+  cursor:pointer;
 }
-.nav-cta:hover{box-shadow:0 0 32px rgba(0,212,255,.5);transform:translateY(-1px)}
+.nav-cta:hover{box-shadow:0 0 40px rgba(6,182,212,0.5);transform:translateY(-1px)}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none}
-.hamburger span{display:block;width:22px;height:2px;background:var(--text2);border-radius:2px;transition:.3s}
-.mobile-menu{display:none;position:fixed;inset:0;background:rgba(10,15,30,.97);z-index:850;flex-direction:column;align-items:center;justify-content:center;gap:32px}
-.mobile-menu a{font-size:22px;font-weight:600;color:var(--text2)}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--text2);border-radius:2px;transition:.3s}
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(4,5,12,.97);z-index:750;
+  flex-direction:column;align-items:center;justify-content:center;gap:32px}
+.mobile-menu a{font-family:var(--syne);font-size:22px;font-weight:700;color:var(--text2)}
 .mobile-menu a:hover{color:var(--cyan)}
 .mobile-menu.open{display:flex}
 
-/* ─── HERO ──────────────────────────────────────────────── */
+/* ═══ HERO ═════════════════════════════════════════════ */
 #hero{
-  position:relative;width:100%;min-height:100vh;
-  display:flex;align-items:center;
-  padding:100px 52px 80px;overflow:hidden;
+  position:relative;min-height:100vh;width:100%;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:100px 56px 0;overflow:hidden;
 }
-#particle-canvas{
+#topo-canvas{
   position:absolute;inset:0;width:100%;height:100%;
   pointer-events:none;z-index:0;
 }
-.hero-grid{
-  position:relative;z-index:1;
+/* Gradient orbs */
+.orb{position:absolute;border-radius:50%;pointer-events:none;z-index:0;filter:blur(100px)}
+.orb-1{width:600px;height:600px;background:rgba(59,130,246,0.12);top:-200px;right:-100px;animation:orbDrift1 18s ease-in-out infinite alternate}
+.orb-2{width:400px;height:400px;background:rgba(124,58,237,0.10);bottom:0;left:-120px;animation:orbDrift2 14s ease-in-out infinite alternate}
+.orb-3{width:300px;height:300px;background:rgba(6,182,212,0.08);top:40%;left:40%;animation:orbDrift3 20s ease-in-out infinite alternate}
+@keyframes orbDrift1{from{transform:translate(0,0)}to{transform:translate(60px,80px)}}
+@keyframes orbDrift2{from{transform:translate(0,0)}to{transform:translate(40px,-60px)}}
+@keyframes orbDrift3{from{transform:translate(0,0)}to{transform:translate(-50px,40px)}}
+
+.hero-inner{
+  position:relative;z-index:2;
   display:grid;grid-template-columns:1fr auto;
-  gap:60px;align-items:center;
-  max-width:1160px;margin:0 auto;width:100%;
+  gap:64px;align-items:center;
+  max-width:1240px;margin:0 auto;width:100%;
 }
-.hero-left{}
-.hero-badge{
+
+/* LEFT */
+.h-available{
   display:inline-flex;align-items:center;gap:8px;
   padding:7px 16px;border-radius:99px;
-  border:1px solid var(--border2);
-  background:rgba(0,212,255,.06);
-  font-size:12.5px;font-weight:600;color:var(--cyan);
-  letter-spacing:.5px;margin-bottom:24px;
-  animation:fadeSlideUp .6s var(--ease) .1s both;
+  background:var(--gbg);border:1px solid var(--gbdr);
+  font-size:12px;font-weight:600;color:var(--green);
+  letter-spacing:.3px;margin-bottom:28px;
+  animation:fadeUp .6s var(--ease) .1s both;
 }
-.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:dotPulse 2s ease infinite}
-@keyframes dotPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,212,255,.7)}50%{box-shadow:0 0 0 6px rgba(0,212,255,0)}}
-.hero-name{
-  font-size:clamp(44px,6.5vw,88px);font-weight:900;
-  letter-spacing:-2.5px;line-height:.95;color:var(--text);
-  margin-bottom:16px;
-  animation:fadeSlideUp .7s var(--ease) .25s both;
+.av-dot{width:7px;height:7px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 8px var(--green);animation:gpulse 2s ease infinite}
+@keyframes gpulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.7)}50%{box-shadow:0 0 0 7px rgba(16,185,129,0)}}
+
+.h-name{
+  font-family:var(--syne);font-weight:800;
+  font-size:clamp(52px,8vw,108px);
+  line-height:.9;letter-spacing:-4px;
+  color:var(--text);margin-bottom:18px;
+  animation:fadeUp .7s var(--ease) .2s both;
 }
-.hero-name span{
+.h-name .grad-word{
+  display:block;
   background:var(--grad);-webkit-background-clip:text;
   -webkit-text-fill-color:transparent;background-clip:text;
 }
-.hero-typed-wrap{
-  font-size:clamp(17px,2vw,22px);font-weight:500;
-  color:var(--text2);min-height:34px;margin-bottom:20px;
-  animation:fadeSlideUp .6s var(--ease) .4s both;
+
+.h-typed-wrap{
+  font-size:clamp(16px,1.8vw,20px);font-weight:500;
+  color:var(--text2);min-height:30px;margin-bottom:20px;
+  animation:fadeUp .6s var(--ease) .32s both;
 }
-#typed-text{color:var(--cyan)}
-.typed-cursor{display:inline-block;width:2px;height:1.1em;background:var(--cyan);vertical-align:text-bottom;margin-left:2px;animation:blink .7s step-end infinite}
+#typed-text{
+  background:var(--grad);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;
+  font-weight:700;
+}
+.h-cursor{
+  display:inline-block;width:2px;height:.9em;
+  background:var(--cyan);margin-left:2px;
+  animation:blink .7s step-end infinite;vertical-align:text-bottom;
+}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.hero-tagline{
-  font-size:17px;color:var(--text2);line-height:1.75;
-  max-width:480px;margin-bottom:40px;font-weight:400;
-  animation:fadeSlideUp .6s var(--ease) .55s both;
+
+.h-tag{
+  font-size:16px;color:var(--text2);line-height:1.82;
+  max-width:480px;margin-bottom:36px;
+  animation:fadeUp .6s var(--ease) .44s both;
 }
-.hero-actions{
+
+.h-actions{
   display:flex;gap:14px;flex-wrap:wrap;
-  animation:fadeSlideUp .6s var(--ease) .7s both;
+  animation:fadeUp .6s var(--ease) .56s both;
 }
 .btn{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:14px 30px;border-radius:10px;
-  font-family:var(--font);font-weight:700;font-size:14.5px;
+  display:inline-flex;align-items:center;gap:9px;
+  padding:14px 30px;border-radius:12px;
+  font-family:var(--sans);font-weight:700;font-size:14px;
   cursor:pointer;transition:all .25s var(--ease);border:none;
 }
 .btn-primary{
   background:var(--grad);color:#fff;
-  box-shadow:0 0 0 0 rgba(0,102,255,.4);
-  animation:glowPulse 2.5s ease infinite;
+  box-shadow:0 0 0 0 rgba(59,130,246,0.4);
+  animation:btnPulse 2.5s ease infinite;
 }
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,102,255,.5)}
-@keyframes glowPulse{0%,100%{box-shadow:0 0 20px rgba(0,102,255,.35)}50%{box-shadow:0 0 36px rgba(0,212,255,.5)}}
-.btn-ghost{
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(59,130,246,0.45)}
+@keyframes btnPulse{0%,100%{box-shadow:0 0 20px rgba(59,130,246,.30)}50%{box-shadow:0 0 36px rgba(6,182,212,.5)}}
+.btn-outline{
   background:transparent;color:var(--text);
-  border:1.5px solid rgba(255,255,255,.18);
+  border:1.5px solid rgba(255,255,255,0.14);
 }
-.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+.btn-outline:hover{border-color:var(--bdr2);color:var(--blue2);transform:translateY(-2px)}
 
-/* Hero photo */
-.hero-right{animation:fadeSlideUp .8s var(--ease) .3s both}
-.photo-wrap{
-  position:relative;width:320px;height:320px;
-  flex-shrink:0;
+/* RIGHT – photo + status */
+.hero-right{
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+  animation:fadeUp .8s var(--ease) .28s both;
 }
-.photo-ring{
-  position:absolute;inset:-12px;border-radius:50%;
-  background:conic-gradient(var(--cyan),var(--blue),transparent,var(--cyan));
+.photo-frame{position:relative;width:300px;height:300px;flex-shrink:0}
+.pr-ring{
+  position:absolute;inset:-5px;border-radius:50%;
+  background:conic-gradient(from 0deg,#3b82f6,#06b6d4,#7c3aed,transparent,#3b82f6);
   animation:spin 8s linear infinite;
-  opacity:.6;
 }
-.photo-ring2{
-  position:absolute;inset:-24px;border-radius:50%;
-  background:conic-gradient(transparent,var(--blue),transparent,var(--cyan),transparent);
+.pr-ring2{
+  position:absolute;inset:-14px;border-radius:50%;
+  background:conic-gradient(from 180deg,transparent,rgba(59,130,246,.2),transparent,rgba(6,182,212,.15),transparent);
   animation:spin 14s linear infinite reverse;
-  opacity:.25;
 }
-@keyframes spin{to{transform:rotate(360deg)}}
-.photo-img{
-  position:relative;z-index:1;
-  width:100%;height:100%;border-radius:50%;
-  object-fit:cover;object-position:top center;
-  border:3px solid rgba(0,212,255,.3);
-  box-shadow:0 0 60px rgba(0,212,255,.2),0 0 120px rgba(0,102,255,.1);
+.pr-inner{
+  position:absolute;inset:5px;border-radius:50%;
+  background:var(--bg);z-index:1;
 }
-.photo-glow{
+.ph-img{
+  position:absolute;inset:5px;z-index:2;
+  border-radius:50%;object-fit:cover;object-position:top center;
+  width:calc(100% - 10px);height:calc(100% - 10px);
+  box-shadow:0 0 60px rgba(59,130,246,.15);
+}
+.pr-glow{
   position:absolute;inset:-40px;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,102,255,.15) 0%,transparent 70%);
+  background:radial-gradient(circle,rgba(59,130,246,.1) 0%,transparent 68%);
   pointer-events:none;z-index:0;
 }
-/* Floating tech orbs */
-.tech-orb{
-  position:absolute;padding:8px 12px;border-radius:99px;
-  background:rgba(13,20,40,.9);border:1px solid var(--border2);
-  font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.5px;
-  box-shadow:0 4px 20px rgba(0,102,255,.2);
-  animation:floatOrb 4s ease-in-out infinite alternate;
-  z-index:2;white-space:nowrap;
-}
-.orb-1{top:10%;right:-60px;animation-delay:0s}
-.orb-2{bottom:20%;right:-70px;animation-delay:.8s}
-.orb-3{top:50%;left:-70px;animation-delay:1.4s}
-@keyframes floatOrb{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-@keyframes fadeSlideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
-/* ─── SECTIONS ──────────────────────────────────────────── */
-.section{padding:100px 0;position:relative}
-.section-dark{background:var(--bg2)}
-.container{max-width:1160px;margin:0 auto;padding:0 52px;position:relative;z-index:1}
-.section-head{text-align:center;margin-bottom:64px}
-.s-label{
-  display:inline-block;font-size:11.5px;font-weight:700;
-  letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:12px;
+/* Ticker */
+.hero-ticker{
+  position:relative;z-index:2;
+  width:100%;margin-top:48px;
+  border-top:1px solid var(--bdr);
+  border-bottom:1px solid var(--bdr);
+  padding:12px 0;overflow:hidden;
+  mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);
 }
-.s-title{
-  font-size:clamp(28px,4vw,46px);font-weight:800;
-  letter-spacing:-1px;color:var(--text);margin-bottom:14px;line-height:1.1;
+.ticker-track{
+  display:flex;gap:0;
+  animation:ticker 28s linear infinite;
+  width:max-content;
 }
-.s-line{
-  width:52px;height:3px;border-radius:99px;
-  background:var(--grad);margin:0 auto;
-}
-
-/* ─── ABOUT ──────────────────────────────────────────────── */
-.about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:72px;align-items:start}
-.about-bio{font-size:16px;color:var(--text2);line-height:1.85}
-.about-bio p+p{margin-top:18px}
-.about-bio strong{color:var(--text);font-weight:600}
-.about-bio .highlight{
-  display:inline-block;padding:2px 8px;border-radius:4px;
-  background:rgba(0,212,255,.1);color:var(--cyan);font-weight:600;
-}
-.stats-wrap{display:flex;flex-direction:column;gap:16px}
-.stat-card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--r);padding:20px 24px;
-  display:flex;align-items:center;gap:20px;
-  transition:border-color .25s,transform .25s;
-  backdrop-filter:blur(8px);
-}
-.stat-card:hover{border-color:var(--border2);transform:translateX(4px)}
-.stat-icon{
-  width:46px;height:46px;border-radius:10px;
-  background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(0,102,255,.1));
-  border:1px solid rgba(0,212,255,.2);
-  display:grid;place-items:center;flex-shrink:0;color:var(--cyan);
-}
-.stat-num{
-  font-size:28px;font-weight:900;color:var(--text);
-  letter-spacing:-1px;line-height:1;
-}
-.stat-num span{color:var(--cyan);font-size:22px}
-.stat-lbl{font-size:12.5px;color:var(--text3);font-weight:500;margin-top:2px}
-
-/* ─── SKILLS ─────────────────────────────────────────────── */
-.skills-cats{display:flex;flex-direction:column;gap:44px}
-.skill-cat-title{
-  font-size:12px;font-weight:700;letter-spacing:2.5px;
-  text-transform:uppercase;color:var(--text3);margin-bottom:16px;
+.ticker-track:hover{animation-play-state:paused}
+.t-item{
   display:flex;align-items:center;gap:10px;
+  padding:0 28px;white-space:nowrap;
+  font-size:11.5px;font-weight:600;color:var(--text3);letter-spacing:1.5px;
+  text-transform:uppercase;
 }
-.skill-cat-title::after{content:'';flex:1;height:1px;background:var(--border)}
-.skills-row{display:flex;flex-wrap:wrap;gap:10px}
-.skill-chip{
-  display:flex;align-items:center;gap:9px;
-  padding:10px 16px;border-radius:10px;
-  background:var(--surface);border:1px solid var(--border);
-  font-size:13.5px;font-weight:600;color:var(--text2);
-  cursor:default;transition:all .2s var(--ease);
-  position:relative;
-}
-.skill-chip:hover{
-  border-color:var(--border2);color:var(--text);
-  background:rgba(0,212,255,.06);
-  transform:translateY(-2px);
-  box-shadow:0 8px 24px rgba(0,102,255,.15);
-}
-.skill-icon{width:22px;height:22px;flex-shrink:0}
-/* Tooltip */
-.skill-chip[data-tip]::after{
-  content:attr(data-tip);
-  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) scale(.9);
-  background:rgba(13,20,40,.97);border:1px solid var(--border2);
-  color:var(--text2);font-size:11.5px;font-weight:400;
-  padding:7px 12px;border-radius:8px;white-space:nowrap;
-  opacity:0;pointer-events:none;transition:opacity .15s,transform .15s;
-  z-index:10;letter-spacing:.2px;
-}
-.skill-chip[data-tip]:hover::after{opacity:1;transform:translateX(-50%) scale(1)}
+.t-item svg{width:14px;height:14px;flex-shrink:0;opacity:.5}
+.t-sep{color:var(--bdr2);font-size:14px}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
-/* ─── PIPELINE ───────────────────────────────────────────── */
-#pipeline{background:var(--bg);padding:90px 0;overflow:hidden}
-.pipeline-wrap{
-  max-width:1200px;margin:0 auto;padding:0 52px;
+/* ═══ SECTION BASE ════════════════════════════════════ */
+.section{padding:104px 0;position:relative;z-index:1}
+.section-dark{background:var(--bg2)}
+.container{max-width:1240px;margin:0 auto;padding:0 56px;position:relative;z-index:1}
+.sec-label{
+  display:inline-block;font-size:11px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:10px;
 }
-.pipeline-track{
-  display:flex;align-items:center;justify-content:space-between;
-  position:relative;margin-top:60px;
+.sec-title{
+  font-family:var(--syne);font-weight:800;
+  font-size:clamp(30px,4.5vw,50px);
+  color:var(--text);letter-spacing:-1.5px;line-height:1.05;margin-bottom:12px;
 }
-.pipe-stage{
+.sec-title .hi{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sec-rule{width:48px;height:3px;background:var(--grad);border-radius:99px;
+  box-shadow:0 0 12px rgba(59,130,246,.4)}
+
+/* ═══ ABOUT ════════════════════════════════════════════ */
+#about{overflow:hidden}
+#about::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 65% 55% at 0% 50%,rgba(59,130,246,.05) 0%,transparent 100%);
+}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.glass-card{
+  background:var(--glass);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--bdr);border-radius:20px;
+  padding:36px;
+  box-shadow:0 8px 40px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05);
+  transition:border-color .3s,box-shadow .3s;
+}
+.glass-card:hover{border-color:var(--bdr2);box-shadow:0 16px 56px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.07)}
+.card-tag{font-size:10.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:16px}
+.about-bio{font-size:15.5px;color:var(--text2);line-height:1.88}
+.about-bio p+p{margin-top:16px}
+.about-bio strong{color:var(--text);font-weight:600}
+.badge-inline{
+  display:inline-flex;align-items:center;
+  padding:2px 9px;border-radius:6px;
+  background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);
+  color:var(--blue2);font-weight:600;font-size:13px;
+}
+
+/* ═══ SKILLS ════════════════════════════════════════════ */
+#skills{overflow:hidden}
+#skills::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 55% 65% at 100% 100%,rgba(124,58,237,.07) 0%,transparent 100%);
+}
+.skills-rows{
+  background:var(--glass);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--bdr);border-radius:20px;
+  overflow:hidden;
+}
+.skill-row{
+  display:grid;grid-template-columns:200px 1fr;
+  align-items:center;gap:0;
+  border-bottom:1px solid var(--bdr);
+  transition:background .2s;
+}
+.skill-row:last-child{border-bottom:none}
+.skill-row:hover{background:rgba(59,130,246,.03)}
+.sk-cat{
+  display:flex;align-items:center;gap:12px;
+  padding:20px 24px;
+  border-right:1px solid var(--bdr);
+  flex-shrink:0;
+}
+.sk-ico{
+  width:36px;height:36px;border-radius:9px;flex-shrink:0;
+  background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.15);
+  display:grid;place-items:center;color:var(--blue2);
+}
+.sk-name{
+  font-family:var(--syne);font-size:13px;font-weight:700;
+  color:var(--text);letter-spacing:-.1px;line-height:1.3;
+}
+.sk-chips{
+  display:flex;flex-wrap:wrap;gap:7px;
+  padding:16px 20px;
+}
+.chip{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 11px;border-radius:7px;
+  background:rgba(255,255,255,.04);border:1px solid var(--bdr);
+  font-size:12px;font-weight:600;color:var(--text2);
+  cursor:default;transition:all .18s var(--ease);
+}
+.chip:hover{border-color:var(--bdr2);color:var(--blue2);background:rgba(59,130,246,.08);transform:translateY(-1px)}
+.chip svg{width:17px;height:17px;flex-shrink:0}
+
+/* ═══ PIPELINE ══════════════════════════════════════════ */
+#pipeline{padding:88px 0;background:var(--bg)}
+#pipeline::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(59,130,246,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(59,130,246,.025) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.pipe-wrap{max-width:1240px;margin:0 auto;padding:0 56px;position:relative;z-index:1}
+.pipeline-row{
+  display:flex;align-items:center;justify-content:center;
+  margin-top:56px;gap:0;
+}
+.ps{
   display:flex;flex-direction:column;align-items:center;gap:12px;
-  position:relative;z-index:1;flex:1;
+  flex:1;max-width:160px;position:relative;z-index:1;cursor:default;
 }
-.pipe-hex{
-  width:80px;height:80px;border-radius:20px;
-  background:var(--bg3);border:2px solid var(--border);
+.ps-hex{
+  width:76px;height:76px;
+  background:var(--bg3);border:2px solid var(--bdr);border-radius:18px;
   display:grid;place-items:center;
-  transition:all .4s;position:relative;
-  box-shadow:0 0 0 0 transparent;
+  transition:all .45s var(--ease);position:relative;
 }
-.pipe-hex svg{opacity:.45;transition:opacity .4s}
-.pipe-stage.active .pipe-hex{
-  border-color:var(--cyan);
-  background:rgba(0,212,255,.08);
-  box-shadow:0 0 24px rgba(0,212,255,.3),0 0 48px rgba(0,102,255,.15);
+.ps-hex svg{opacity:.28;color:var(--text);transition:opacity .45s,color .45s}
+.ps.active .ps-hex{
+  border-color:var(--blue);background:rgba(59,130,246,.1);
+  box-shadow:0 0 28px rgba(59,130,246,.35),0 0 56px rgba(59,130,246,.1);
 }
-.pipe-stage.active .pipe-hex svg{opacity:1}
-.pipe-label{
-  font-size:12px;font-weight:700;letter-spacing:1.5px;
-  text-transform:uppercase;color:var(--text3);
-  transition:color .4s;text-align:center;
+.ps.active .ps-hex svg{opacity:1;color:var(--blue2)}
+.ps.done .ps-hex{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.06)}
+.ps.done .ps-hex svg{opacity:.7;color:var(--green)}
+.ps-label{
+  font-size:10.5px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--text3);transition:color .45s;text-align:center;
 }
-.pipe-stage.active .pipe-label{color:var(--cyan)}
+.ps.active .ps-label{color:var(--blue2)}
+.ps.done .ps-label{color:var(--green)}
+.ps-sub{font-size:9.5px;color:var(--text3);transition:color .45s;font-weight:500}
+.ps.active .ps-sub{color:rgba(96,165,250,.6)}
 
-.pipe-connector{
-  flex:1;height:2px;background:var(--border);
-  position:relative;margin:0 -2px;margin-bottom:32px;
-  overflow:hidden;max-width:80px;
-}
-.pipe-connector::after{
+.pc{flex:1;max-width:80px;height:2px;background:var(--bdr);position:relative;margin-bottom:32px;overflow:hidden}
+.pc::after{
   content:'';position:absolute;inset:0;
   background:linear-gradient(90deg,transparent,var(--cyan),transparent);
-  transform:translateX(-100%);transition:transform 0s;
+  transform:translateX(-100%);
 }
-.pipe-connector.flowing::after{
-  animation:flowLine .6s ease forwards;
-}
-@keyframes flowLine{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.pc.flowing::after{animation:pflow .6s ease forwards}
+@keyframes pflow{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 
-/* ─── PROJECTS ───────────────────────────────────────────── */
-.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.project-card{
-  background:rgba(255,255,255,.03);
-  border:1px solid var(--border);border-radius:18px;
-  padding:32px;display:flex;flex-direction:column;
-  position:relative;overflow:hidden;
+/* ═══ PROJECTS ══════════════════════════════════════════ */
+#projects{overflow:hidden}
+#projects::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at 50% 5%,rgba(124,58,237,.07) 0%,transparent 100%);
+}
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.proj-card{
+  background:var(--glass);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--bdr);border-radius:16px;
+  padding:22px;display:flex;flex-direction:column;
   transition:transform .3s var(--ease),border-color .3s,box-shadow .3s;
-  backdrop-filter:blur(10px);
+  position:relative;
 }
-.project-card::before{
-  content:'';position:absolute;inset:0;border-radius:18px;
-  background:var(--grad);opacity:0;transition:opacity .3s;
-  mask:linear-gradient(#fff,#fff) content-box,linear-gradient(#fff,#fff);
-  mask-composite:exclude;-webkit-mask-composite:xor;
-  padding:1.5px;
+.proj-card:hover{
+  transform:translateY(-5px);
+  border-color:var(--bdr2);
+  box-shadow:0 16px 40px rgba(0,0,0,.4);
 }
-.project-card:hover{
-  transform:translateY(-8px);
-  border-color:rgba(0,212,255,.3);
-  box-shadow:0 24px 64px rgba(0,0,0,.5),0 0 0 1px rgba(0,212,255,.1);
+.proj-card-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;
 }
-.project-card:hover::before{opacity:.6}
+.proj-num{
+  font-family:var(--syne);font-size:11px;font-weight:700;
+  letter-spacing:2px;color:var(--cyan2);
+}
+.proj-badge{
+  padding:4px 10px;border-radius:99px;font-size:10px;font-weight:700;
+  letter-spacing:.5px;text-transform:uppercase;
+  background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.18);color:var(--blue2);
+}
+.proj-name{
+  font-family:var(--syne);font-size:16px;font-weight:700;
+  color:var(--text);letter-spacing:-.2px;margin-bottom:8px;
+}
+.proj-desc{
+  font-size:12.5px;color:var(--text2);line-height:1.7;
+  margin-bottom:14px;flex:1;
+  display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;
+}
+.proj-stack{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.stk{
+  font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;
+  background:rgba(6,182,212,.07);border:1px solid rgba(6,182,212,.14);color:var(--cyan2);
+}
+.proj-links{display:flex;gap:8px;margin-top:auto}
+.plink{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:8px;
+  font-weight:600;font-size:11.5px;color:var(--text2);
+  border:1px solid var(--bdr);background:rgba(255,255,255,.03);
+  transition:all .2s var(--ease);cursor:pointer;
+}
+.plink:hover{color:var(--blue2);border-color:var(--bdr2);background:rgba(59,130,246,.07);transform:translateY(-1px)}
+.plink svg{width:12px;height:12px}
 
-.project-glow{
-  position:absolute;top:-60px;right:-60px;
-  width:180px;height:180px;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,102,255,.15) 0%,transparent 70%);
-  pointer-events:none;transition:opacity .3s;opacity:0;
-}
-.project-card:hover .project-glow{opacity:1}
-.project-num{
-  font-size:11px;font-weight:700;letter-spacing:2.5px;
-  text-transform:uppercase;color:var(--cyan);margin-bottom:14px;
-}
-.project-name{
-  font-size:20px;font-weight:800;color:var(--text);
-  letter-spacing:-.3px;margin-bottom:10px;
-}
-.project-desc{font-size:13.5px;color:var(--text2);line-height:1.72;flex:1;margin-bottom:20px}
-.project-stack{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px}
-.stack-tag{
-  font-size:11.5px;font-weight:600;padding:4px 10px;
-  border-radius:6px;background:rgba(0,212,255,.08);
-  border:1px solid rgba(0,212,255,.15);color:var(--cyan);
-}
-.project-links{display:flex;gap:14px}
-.proj-link{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:13px;font-weight:700;color:var(--text2);
-  transition:color .2s;
-}
-.proj-link:hover{color:var(--cyan)}
-.proj-link svg{width:13px;height:13px}
-
-/* ─── TIMELINE ───────────────────────────────────────────── */
-.timeline{position:relative;padding-left:40px}
-.tl-line-wrap{
-  position:absolute;left:10px;top:8px;bottom:0;
-  width:2px;background:var(--border);border-radius:2px;overflow:hidden;
-}
-.tl-line-fill{
-  width:100%;background:linear-gradient(to bottom,var(--cyan),var(--blue));
-  border-radius:2px;height:0;transition:height 1.5s cubic-bezier(.22,1,.36,1);
-}
-.tl-item{position:relative;margin-bottom:48px;padding-bottom:4px}
-.tl-item:last-child{margin-bottom:0}
-.tl-dot{
-  position:absolute;left:-35px;top:6px;
-  width:16px;height:16px;border-radius:50%;
-  background:var(--bg);border:2.5px solid var(--border);
-  transition:border-color .3s,background .3s,box-shadow .3s;
-}
-.tl-item.tl-active .tl-dot{
-  border-color:var(--cyan);background:var(--cyan);
-  box-shadow:0 0 12px rgba(0,212,255,.6);
-}
-.tl-period{
-  font-size:11.5px;font-weight:700;letter-spacing:.5px;
-  color:var(--cyan);margin-bottom:6px;
-}
-.tl-role{
-  font-size:19px;font-weight:800;color:var(--text);
-  letter-spacing:-.3px;margin-bottom:3px;
-}
-.tl-company{font-size:14px;font-weight:600;color:var(--text2);margin-bottom:12px}
-.tl-bullets{font-size:13.5px;color:var(--text3);line-height:1.8;list-style:none}
-.tl-bullets li{position:relative;padding-left:16px;margin-bottom:4px}
-.tl-bullets li::before{
-  content:'→';position:absolute;left:0;
-  color:var(--cyan);font-size:11px;
-}
-
-/* ─── CONTACT ────────────────────────────────────────────── */
+/* ═══ CONTACT ════════════════════════════════════════════ */
 #contact{background:var(--bg);position:relative;overflow:hidden}
-
-/* ─── SECTION BACKGROUNDS ───────────────────────────────── */
-#about,#skills,#projects{overflow:hidden}
-
-/* dot grid */
-#about::before,#skills::before,#projects::before,#contact::before{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
-  background-image:radial-gradient(circle,rgba(255,255,255,0.038) 1px,transparent 1px);
-  background-size:28px 28px;
+#contact::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 80% 70% at 50% 110%,rgba(59,130,246,.1) 0%,rgba(6,182,212,.05) 45%,transparent 70%);
 }
-/* About: cyan glow top-left */
-#about::after{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
-  background:radial-gradient(ellipse 65% 55% at 0% 15%,rgba(0,212,255,0.07) 0%,transparent 100%);
-}
-/* Skills: blue glow bottom-right */
-#skills::after{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
-  background:radial-gradient(ellipse 55% 65% at 100% 90%,rgba(0,102,255,0.09) 0%,transparent 100%);
-}
-/* Projects: purple-blue glow top-right */
-#projects::after{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
-  background:radial-gradient(ellipse 55% 50% at 100% 5%,rgba(102,0,255,0.07) 0%,transparent 100%);
-}
-/* Contact: centered bottom glow */
-#contact::after{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
-  background:radial-gradient(ellipse 75% 60% at 50% 110%,rgba(0,102,255,0.11) 0%,rgba(0,212,255,0.05) 45%,transparent 70%);
-}
-.contact-inner{max-width:700px;margin:0 auto;text-align:center}
-.avail-badge{
+.contact-center{max-width:680px;margin:0 auto;text-align:center}
+.av-badge{
   display:inline-flex;align-items:center;gap:8px;
-  padding:9px 20px;border-radius:99px;
-  background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);
-  font-size:13px;font-weight:700;color:#4ade80;
+  padding:9px 22px;border-radius:99px;
+  background:var(--gbg);border:1px solid var(--gbdr);
+  font-size:13px;font-weight:700;color:var(--green);
   margin-bottom:28px;letter-spacing:.3px;
 }
-.avail-dot{
-  width:8px;height:8px;border-radius:50%;background:#4ade80;
-  box-shadow:0 0 8px rgba(74,222,128,.7);
-  animation:availPulse 2s ease infinite;
+.av-badge-dot{width:8px;height:8px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 8px rgba(16,185,129,.7);animation:gpulse 2s ease infinite}
+.contact-heading{
+  font-family:var(--syne);font-size:clamp(32px,5vw,56px);
+  font-weight:800;color:var(--text);letter-spacing:-2px;
+  line-height:1.05;margin-bottom:18px;
 }
-@keyframes availPulse{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,.6)}50%{box-shadow:0 0 0 8px rgba(74,222,128,0)}}
-.contact-text{font-size:16px;color:var(--text2);line-height:1.8;margin-bottom:44px}
-.contact-socials{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
-.social-btn{
+.contact-heading span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.contact-sub{font-size:16px;color:var(--text2);line-height:1.8;margin-bottom:44px}
+.socials{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.soc{
   display:flex;align-items:center;gap:10px;
-  padding:14px 24px;border-radius:12px;
-  background:var(--surface);border:1px solid var(--border);
+  padding:14px 26px;border-radius:14px;
+  background:var(--glass);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--bdr);
   font-size:14px;font-weight:600;color:var(--text2);
-  transition:all .25s var(--ease);
+  transition:all .25s var(--ease);cursor:pointer;
 }
-.social-btn:hover{
-  border-color:var(--border2);color:var(--text);
-  background:rgba(0,212,255,.07);
+.soc:hover{
+  border-color:var(--bdr2);color:var(--text);
+  background:rgba(59,130,246,.1);
   transform:translateY(-3px);
-  box-shadow:0 12px 32px rgba(0,102,255,.2);
+  box-shadow:0 14px 40px rgba(0,0,0,.3);
 }
-.social-btn svg{width:18px;height:18px;color:var(--cyan)}
+.soc svg{width:18px;height:18px;color:var(--blue2)}
 
-/* ─── FOOTER ─────────────────────────────────────────────── */
+/* ═══ FOOTER ═════════════════════════════════════════════ */
 footer{
-  border-top:1px solid var(--border);
-  padding:28px 52px;display:flex;
-  align-items:center;justify-content:space-between;
-  background:var(--bg);
+  border-top:1px solid var(--bdr);padding:28px 56px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg);position:relative;z-index:1;
 }
-.foot-logo{
-  font-weight:800;font-size:16px;letter-spacing:-.3px;
-  background:var(--grad);-webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;background-clip:text;
+.foot-brand{
+  font-family:var(--syne);font-weight:800;font-size:16px;
+  background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .foot-copy{font-size:12.5px;color:var(--text3)}
 
-/* ─── REVEAL ANIMATIONS ──────────────────────────────────── */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
-.reveal-l{opacity:0;transform:translateX(-28px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
-.reveal-r{opacity:0;transform:translateX(28px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+/* ═══ REVEAL ═════════════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal-l{opacity:0;transform:translateX(-28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal-r{opacity:0;transform:translateX(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .reveal.in,.reveal-l.in,.reveal-r.in{opacity:1;transform:none}
 
-/* ─── RESPONSIVE ─────────────────────────────────────────── */
-@media(max-width:1000px){
+/* ═══ RESPONSIVE ════════════════════════════════════════ */
+@media(max-width:1024px){
   #nav{padding:0 24px}
-  #hero{padding:90px 24px 60px}
-  .container{padding:0 24px}
-  .pipeline-wrap{padding:0 24px}
-  .hero-grid{grid-template-columns:1fr;gap:40px;text-align:center}
-  .hero-tagline{max-width:100%}
-  .hero-actions{justify-content:center}
-  .hero-right{display:flex;justify-content:center}
-  .photo-wrap{width:240px;height:240px}
-  .about-grid{grid-template-columns:1fr;gap:40px}
-  .projects-grid{grid-template-columns:1fr;max-width:500px;margin:0 auto}
-  .pipeline-track{flex-wrap:wrap;gap:20px;justify-content:center}
-  .pipe-connector{display:none}
+  #hero{padding:80px 24px 0}
+  .container,.pipe-wrap{padding:0 24px}
+  .hero-inner{grid-template-columns:1fr;gap:40px;text-align:center}
+  .h-tag,.h-available,.h-actions,.h-typed-wrap{margin-left:auto;margin-right:auto}
+  .h-tag{max-width:100%}
+  .h-actions{justify-content:center}
+  .hero-right{align-items:center}
+  .about-grid{grid-template-columns:1fr;gap:24px}
+  .skill-row{grid-template-columns:1fr}
+  .sk-cat{border-right:none;border-bottom:1px solid var(--bdr);padding-bottom:12px;margin-bottom:0}
+  .sk-chips{padding-top:12px}
+  .pipeline-row{flex-wrap:wrap;gap:16px;justify-content:center}
+  .pc{display:none}
   .nav-links{display:none}
   .hamburger{display:flex}
-  footer{flex-direction:column;gap:8px;text-align:center;padding:24px}
-  .tech-orb{display:none}
+  .projects-grid{grid-template-columns:1fr 1fr}
+  footer{flex-direction:column;gap:8px;text-align:center;padding:22px}
+}
+@media(max-width:480px){
+  .photo-frame{width:230px;height:230px}
+  .projects-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
+<div id="cur"></div>
+<div id="cur2"></div>
+
 <!-- NAV -->
 <nav id="nav">
-  <a class="nav-logo" href="#hero">PL.</a>
+  <a class="nav-brand" href="#hero">PL.</a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#skills">Skills</a></li>
+    <li><a href="#pipeline">Pipeline</a></li>
     <li><a href="#projects">Projects</a></li>
-    <li><a href="#experience">Experience</a></li>
     <li><a href="#contact" class="nav-cta">Contact</a></li>
   </ul>
   <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -543,50 +582,112 @@ footer{
   </button>
 </nav>
 <div class="mobile-menu" id="mobile-menu">
-  <a href="#about" onclick="closeMobile()">About</a>
-  <a href="#skills" onclick="closeMobile()">Skills</a>
-  <!--
+  <a href="#about"    onclick="closeMobile()">About</a>
+  <a href="#skills"   onclick="closeMobile()">Skills</a>
   <a href="#pipeline" onclick="closeMobile()">Pipeline</a>
   <a href="#projects" onclick="closeMobile()">Projects</a>
-  -->
-  <a href="#experience" onclick="closeMobile()">Experience</a>
-  <a href="#contact" onclick="closeMobile()">Contact</a>
+  <a href="#contact"  onclick="closeMobile()">Contact</a>
 </div>
 
 <!-- HERO -->
 <section id="hero">
-  <canvas id="particle-canvas"></canvas>
-  <div class="hero-grid">
+  <canvas id="topo-canvas"></canvas>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="hero-inner">
     <div class="hero-left">
-      <div class="hero-badge"><div class="badge-dot"></div>Available for new opportunities</div>
-      <h1 class="hero-name">Peleg<br><span>Levy</span></h1>
-      <div class="hero-typed-wrap"><span id="typed-text"></span><span class="typed-cursor"></span></div>
-      <p class="hero-tagline">Managing production Linux environments, Kubernetes and OpenShift platforms, and CI/CD pipelines — so applications run reliably at every scale.</p>
-      <div class="hero-actions">
-        <!--
+      <div class="h-available"><div class="av-dot"></div>Open to new opportunities</div>
+      <h1 class="h-name">
+        <span>Peleg</span>
+        <span class="grad-word">Levy</span>
+      </h1>
+      <div class="h-typed-wrap"><span id="typed-text"></span><span class="h-cursor"></span></div>
+      <p class="h-tag">Managing production Linux environments, Kubernetes and OpenShift platforms, and CI/CD pipelines — so applications run reliably at every scale.</p>
+      <div class="h-actions">
         <a href="#projects" class="btn btn-primary">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
           View My Work
         </a>
-        -->
-        <a href="./Peleg_Levy_CV.pdf" download="Peleg_Levy_CV.pdf" class="btn btn-ghost">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <a href="./Peleg_Levy_CV.pdf" download="Peleg_Levy_CV.pdf" class="btn btn-outline">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download CV
         </a>
       </div>
     </div>
+
     <div class="hero-right">
-      <div class="photo-wrap">
-        <div class="photo-glow"></div>
-        <div class="photo-ring"></div>
-        <div class="photo-ring2"></div>
-        <img class="photo-img" src="protfolio_image.png" alt="Peleg Levy">
-        <!--
-        <div class="tech-orb orb-1">☸ Kubernetes</div>
-        <div class="tech-orb orb-2">⬡ Terraform</div>
-        <div class="tech-orb orb-3">🐳 Docker</div>
-        -->
+      <div class="photo-frame">
+        <div class="pr-glow"></div>
+        <div class="pr-ring"></div>
+        <div class="pr-ring2"></div>
+        <div class="pr-inner"></div>
+        <img class="ph-img" src="protfolio_image.png" alt="Peleg Levy">
       </div>
+
+    </div>
+  </div>
+
+  <!-- Marquee ticker -->
+  <div class="hero-ticker">
+    <div class="ticker-track" id="ticker">
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#2496ED"><path d="M4.82 17.69H7V22h10v-4.31h2.18L12 10.38zm7.18-14l-8 4.82L12 13l8-4.49z"/></svg>Docker</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#326CE5"><path d="M10.204 14.35l.869 1.745-.005.03a1.5 1.5 0 00.61 2.313l.105.037-1.32 2.605L12 22l1.537-.92-1.32-2.605.105-.037a1.5 1.5 0 00.61-2.313l-.005-.03.869-1.745A7 7 0 0112 5a7 7 0 010 14 7 7 0 01-1.796-.65zM12 3a9 9 0 100 18A9 9 0 0012 3z"/></svg>Kubernetes</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#EE0000"><circle cx="12" cy="12" r="10"/></svg>OpenShift</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#D24939"><circle cx="12" cy="12" r="10"/></svg>Jenkins</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#EF7B4D"><circle cx="12" cy="12" r="10"/></svg>ArgoCD</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#EE0000"><polygon points="12,2 22,19 2,19"/></svg>Ansible</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#0078D4"><polygon points="12,2 22,19 2,19"/></svg>Azure DevOps</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#F05032"><circle cx="12" cy="12" r="10"/></svg>Git</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#FCC624"><circle cx="12" cy="12" r="10"/></svg>Linux</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#E6522C"><circle cx="12" cy="12" r="10"/></svg>Prometheus</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#F46800"><circle cx="12" cy="12" r="10"/></svg>Grafana</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#607078"><rect x="2" y="2" width="20" height="20" rx="3"/></svg>VMware</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#0F1689"><circle cx="12" cy="12" r="10"/></svg>Helm</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#FF5B39"><circle cx="12" cy="12" r="10"/></svg>Splunk</span>
+      <span class="t-sep">·</span>
+      <!-- duplicate for seamless loop -->
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#2496ED"><path d="M4.82 17.69H7V22h10v-4.31h2.18L12 10.38zm7.18-14l-8 4.82L12 13l8-4.49z"/></svg>Docker</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#326CE5"><path d="M10.204 14.35l.869 1.745-.005.03a1.5 1.5 0 00.61 2.313l.105.037-1.32 2.605L12 22l1.537-.92-1.32-2.605.105-.037a1.5 1.5 0 00.61-2.313l-.005-.03.869-1.745A7 7 0 0112 5a7 7 0 010 14 7 7 0 01-1.796-.65zM12 3a9 9 0 100 18A9 9 0 0012 3z"/></svg>Kubernetes</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#EE0000"><circle cx="12" cy="12" r="10"/></svg>OpenShift</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#D24939"><circle cx="12" cy="12" r="10"/></svg>Jenkins</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#EF7B4D"><circle cx="12" cy="12" r="10"/></svg>ArgoCD</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#EE0000"><polygon points="12,2 22,19 2,19"/></svg>Ansible</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#0078D4"><polygon points="12,2 22,19 2,19"/></svg>Azure DevOps</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#F05032"><circle cx="12" cy="12" r="10"/></svg>Git</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#FCC624"><circle cx="12" cy="12" r="10"/></svg>Linux</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#E6522C"><circle cx="12" cy="12" r="10"/></svg>Prometheus</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#F46800"><circle cx="12" cy="12" r="10"/></svg>Grafana</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#607078"><rect x="2" y="2" width="20" height="20" rx="3"/></svg>VMware</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#0F1689"><circle cx="12" cy="12" r="10"/></svg>Helm</span>
+      <span class="t-sep">·</span>
+      <span class="t-item"><svg viewBox="0 0 24 24" fill="#FF5B39"><circle cx="12" cy="12" r="10"/></svg>Splunk</span>
     </div>
   </div>
 </section>
@@ -594,17 +695,20 @@ footer{
 <!-- ABOUT -->
 <section id="about" class="section section-dark">
   <div class="container">
-    <div class="section-head reveal">
-      <div class="s-label">About Me</div>
-      <h2 class="s-title">The engineer behind the infra</h2>
-      <div class="s-line"></div>
+    <div class="section-head reveal" style="margin-bottom:52px">
+      <div class="sec-label">About Me</div>
+      <h2 class="sec-title">The engineer behind the <span class="hi">infrastructure</span></h2>
+      <div class="sec-rule" style="margin-top:10px"></div>
     </div>
     <div class="about-grid">
-      <div class="reveal-l" style="transition-delay:.05s">
-        <div class="about-bio">
-          <p>Linux &amp; DevOps Engineer with <strong>5+ years of experience</strong> managing production Linux infrastructures, <span class="highlight">Kubernetes</span> / <span class="highlight">OpenShift</span> platforms, CI/CD pipelines, and infrastructure automation.</p>
-          <p>Experienced in deploying and supporting scalable enterprise applications across production and pre-production environments using <span class="highlight">Jenkins</span>, <span class="highlight">ArgoCD</span>, Helm, Ansible, and Azure DevOps.</p>
-          <p>Strong background in <strong>system reliability</strong>, GitOps workflows, monitoring, observability, and troubleshooting complex infrastructure environments.</p>
+      <div class="reveal-l" style="transition-delay:.06s">
+        <div class="glass-card">
+          <div class="card-tag">// Bio</div>
+          <div class="about-bio">
+            <p>Linux &amp; DevOps Engineer with <strong>5+ years of experience</strong> managing production Linux infrastructures, <span class="badge-inline">Kubernetes</span> / <span class="badge-inline">OpenShift</span> platforms, CI/CD pipelines, and infrastructure automation.</p>
+            <p>Experienced in deploying and supporting scalable enterprise applications across production and pre-production environments using <span class="badge-inline">Jenkins</span>, <span class="badge-inline">ArgoCD</span>, Helm, Ansible, and Azure DevOps.</p>
+            <p>Strong background in <strong>system reliability</strong>, GitOps workflows, monitoring, observability, and troubleshooting complex infrastructure environments.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -614,91 +718,69 @@ footer{
 <!-- SKILLS -->
 <section id="skills" class="section">
   <div class="container">
-    <div class="section-head reveal">
-      <div class="s-label">Tech Stack</div>
-      <h2 class="s-title">Skills &amp; Tools</h2>
-      <div class="s-line"></div>
+    <div class="section-head reveal" style="margin-bottom:52px">
+      <div class="sec-label">Tech Stack</div>
+      <h2 class="sec-title">Skills &amp; <span class="hi">Tools</span></h2>
+      <div class="sec-rule" style="margin-top:10px"></div>
     </div>
-    <div class="skills-cats reveal" style="transition-delay:.05s">
+    <div class="skills-rows reveal" style="transition-delay:.05s">
 
-      <div>
-        <div class="skill-cat-title">Containers &amp; Orchestration</div>
-        <div class="skills-row">
-          <div class="skill-chip" data-tip="Container builds, multi-stage, Compose">
-            <svg class="skill-icon" viewBox="0 0 48 48"><rect x="6" y="22" width="10" height="8" rx="2" fill="none" stroke="#2496ED" stroke-width="2"/><rect x="18" y="22" width="10" height="8" rx="2" fill="none" stroke="#2496ED" stroke-width="2"/><rect x="30" y="22" width="10" height="8" rx="2" fill="none" stroke="#2496ED" stroke-width="2"/><rect x="12" y="14" width="10" height="8" rx="2" fill="none" stroke="#2496ED" stroke-width="2"/><rect x="24" y="14" width="10" height="8" rx="2" fill="none" stroke="#2496ED" stroke-width="2"/><path d="M38 26 C42 22 44 18 42 14 C40 10 36 10 34 12" stroke="#2496ED" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="40" cy="27" r="1.5" fill="#2496ED"/></svg>Docker
-          </div>
-          <div class="skill-chip" data-tip="Cluster admin, workloads, networking, GitOps">
-            <svg class="skill-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="18" fill="none" stroke="#326CE5" stroke-width="2.5"/><line x1="24" y1="6" x2="24" y2="18" stroke="#326CE5" stroke-width="2"/><line x1="24" y1="30" x2="24" y2="42" stroke="#326CE5" stroke-width="2"/><line x1="6" y1="24" x2="18" y2="24" stroke="#326CE5" stroke-width="2"/><line x1="30" y1="24" x2="42" y2="24" stroke="#326CE5" stroke-width="2"/><line x1="10" y1="10" x2="18" y2="18" stroke="#326CE5" stroke-width="2"/><line x1="30" y1="30" x2="38" y2="38" stroke="#326CE5" stroke-width="2"/><line x1="38" y1="10" x2="30" y2="18" stroke="#326CE5" stroke-width="2"/><line x1="18" y1="30" x2="10" y2="38" stroke="#326CE5" stroke-width="2"/><circle cx="24" cy="24" r="5" fill="#326CE5"/></svg>Kubernetes
-          </div>
-          <div class="skill-chip" data-tip="Enterprise Kubernetes platform, OCP deployments">
-            <svg class="skill-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="18" fill="none" stroke="#EE0000" stroke-width="2.5"/><circle cx="24" cy="24" r="9" fill="none" stroke="#EE0000" stroke-width="2"/><circle cx="24" cy="24" r="3" fill="#EE0000"/></svg>OpenShift
-          </div>
-          <div class="skill-chip" data-tip="Chart authoring, values management, releases">
-            <svg class="skill-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="18" fill="none" stroke="#0F1689" stroke-width="2.5"/><circle cx="24" cy="24" r="6" fill="none" stroke="#0F1689" stroke-width="2"/><line x1="24" y1="6" x2="24" y2="14" stroke="#0F1689" stroke-width="2.5"/><line x1="24" y1="34" x2="24" y2="42" stroke="#0F1689" stroke-width="2.5"/><line x1="6" y1="24" x2="14" y2="24" stroke="#0F1689" stroke-width="2.5"/><line x1="34" y1="24" x2="42" y2="24" stroke="#0F1689" stroke-width="2.5"/></svg>Helm
-          </div>
+      <!-- Containers & Orchestration -->
+      <div class="skill-row">
+        <div class="sk-cat">
+          <div class="sk-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+          <div class="sk-name">Containers &amp;<br>Orchestration</div>
+        </div>
+        <div class="sk-chips">
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><rect x="6" y="22" width="10" height="8" rx="2" fill="none" stroke="#2496ED" stroke-width="2"/><rect x="18" y="22" width="10" height="8" rx="2" fill="none" stroke="#2496ED" stroke-width="2"/><rect x="30" y="22" width="10" height="8" rx="2" fill="none" stroke="#2496ED" stroke-width="2"/><rect x="12" y="14" width="10" height="8" rx="2" fill="none" stroke="#2496ED" stroke-width="2"/><rect x="24" y="14" width="10" height="8" rx="2" fill="none" stroke="#2496ED" stroke-width="2"/><path d="M38 26 C42 22 44 18 42 14 C40 10 36 10 34 12" stroke="#2496ED" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="40" cy="27" r="1.5" fill="#2496ED"/></svg>Docker</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><circle cx="24" cy="24" r="18" fill="none" stroke="#326CE5" stroke-width="2.5"/><line x1="24" y1="6" x2="24" y2="18" stroke="#326CE5" stroke-width="2"/><line x1="24" y1="30" x2="24" y2="42" stroke="#326CE5" stroke-width="2"/><line x1="6" y1="24" x2="18" y2="24" stroke="#326CE5" stroke-width="2"/><line x1="30" y1="24" x2="42" y2="24" stroke="#326CE5" stroke-width="2"/><line x1="10" y1="10" x2="18" y2="18" stroke="#326CE5" stroke-width="2"/><line x1="30" y1="30" x2="38" y2="38" stroke="#326CE5" stroke-width="2"/><line x1="38" y1="10" x2="30" y2="18" stroke="#326CE5" stroke-width="2"/><line x1="18" y1="30" x2="10" y2="38" stroke="#326CE5" stroke-width="2"/><circle cx="24" cy="24" r="5" fill="#326CE5"/></svg>Kubernetes</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><circle cx="24" cy="24" r="18" fill="none" stroke="#EE0000" stroke-width="2.5"/><circle cx="24" cy="24" r="9" fill="none" stroke="#EE0000" stroke-width="2"/><circle cx="24" cy="24" r="3" fill="#EE0000"/></svg>OpenShift</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><circle cx="24" cy="24" r="18" fill="none" stroke="#0F1689" stroke-width="2.5"/><circle cx="24" cy="24" r="6" fill="none" stroke="#0F1689" stroke-width="2"/><line x1="24" y1="6" x2="24" y2="14" stroke="#0F1689" stroke-width="2.5"/><line x1="24" y1="34" x2="24" y2="42" stroke="#0F1689" stroke-width="2.5"/><line x1="6" y1="24" x2="14" y2="24" stroke="#0F1689" stroke-width="2.5"/><line x1="34" y1="24" x2="42" y2="24" stroke="#0F1689" stroke-width="2.5"/></svg>Helm</div>
         </div>
       </div>
 
-      <div>
-        <div class="skill-cat-title">CI/CD &amp; GitOps</div>
-        <div class="skills-row">
-          <div class="skill-chip" data-tip="Pipelines, shared libraries, multi-branch builds">
-            <svg class="skill-icon" viewBox="0 0 48 48"><circle cx="24" cy="16" r="10" fill="none" stroke="#D24939" stroke-width="2.5"/><rect x="16" y="24" width="16" height="18" rx="3" fill="none" stroke="#D24939" stroke-width="2"/><line x1="20" y1="30" x2="28" y2="30" stroke="#D24939" stroke-width="1.5"/><line x1="20" y1="35" x2="28" y2="35" stroke="#D24939" stroke-width="1.5"/></svg>Jenkins
-          </div>
-          <div class="skill-chip" data-tip="GitOps continuous delivery for Kubernetes">
-            <svg class="skill-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="16" fill="none" stroke="#EF7B4D" stroke-width="2.5"/><path d="M16 24 Q24 10 32 24 Q24 38 16 24Z" fill="none" stroke="#EF7B4D" stroke-width="2"/><circle cx="24" cy="24" r="3" fill="#EF7B4D"/></svg>ArgoCD
-          </div>
-          <div class="skill-chip" data-tip="Config management, playbooks, roles, inventories">
-            <svg class="skill-icon" viewBox="0 0 48 48"><path d="M24 4 L42 14 L42 34 L24 44 L6 34 L6 14 Z" fill="none" stroke="#EE0000" stroke-width="2.5"/><text x="17" y="30" font-family="sans-serif" font-weight="900" font-size="16" fill="#EE0000">A</text></svg>Ansible
-          </div>
-          <div class="skill-chip" data-tip="Pipelines, boards, repos, artifact management">
-            <svg class="skill-icon" viewBox="0 0 48 48"><polygon points="24,4 44,36 4,36" fill="none" stroke="#0078D4" stroke-width="2.5"/><line x1="24" y1="14" x2="24" y2="28" stroke="#0078D4" stroke-width="2"/><circle cx="24" cy="32" r="2" fill="#0078D4"/></svg>Azure DevOps
-          </div>
-          <div class="skill-chip" data-tip="Version control, branching strategies, GitOps workflows">
-            <svg class="skill-icon" viewBox="0 0 48 48"><circle cx="12" cy="12" r="6" fill="none" stroke="#F05032" stroke-width="2.5"/><circle cx="36" cy="36" r="6" fill="none" stroke="#F05032" stroke-width="2.5"/><circle cx="36" cy="12" r="6" fill="none" stroke="#F05032" stroke-width="2.5"/><line x1="12" y1="18" x2="12" y2="30" stroke="#F05032" stroke-width="2"/><path d="M12 30 Q12 42 24 42 Q36 42 36 30" stroke="#F05032" stroke-width="2" fill="none"/><line x1="36" y1="18" x2="36" y2="30" stroke="#F05032" stroke-width="2"/></svg>Git
-          </div>
+      <!-- CI/CD & GitOps -->
+      <div class="skill-row">
+        <div class="sk-cat">
+          <div class="sk-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+          <div class="sk-name">CI/CD &amp;<br>GitOps</div>
+        </div>
+        <div class="sk-chips">
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><circle cx="24" cy="16" r="10" fill="none" stroke="#D24939" stroke-width="2.5"/><rect x="16" y="24" width="16" height="18" rx="3" fill="none" stroke="#D24939" stroke-width="2"/><line x1="20" y1="30" x2="28" y2="30" stroke="#D24939" stroke-width="1.5"/><line x1="20" y1="35" x2="28" y2="35" stroke="#D24939" stroke-width="1.5"/></svg>Jenkins</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><circle cx="24" cy="24" r="16" fill="none" stroke="#EF7B4D" stroke-width="2.5"/><path d="M16 24 Q24 10 32 24 Q24 38 16 24Z" fill="none" stroke="#EF7B4D" stroke-width="2"/><circle cx="24" cy="24" r="3" fill="#EF7B4D"/></svg>ArgoCD</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><path d="M24 4 L42 14 L42 34 L24 44 L6 34 L6 14 Z" fill="none" stroke="#EE0000" stroke-width="2.5"/><text x="17" y="30" font-family="sans-serif" font-weight="900" font-size="16" fill="#EE0000">A</text></svg>Ansible</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><polygon points="24,4 44,36 4,36" fill="none" stroke="#0078D4" stroke-width="2.5"/><line x1="24" y1="14" x2="24" y2="28" stroke="#0078D4" stroke-width="2"/><circle cx="24" cy="32" r="2" fill="#0078D4"/></svg>Azure DevOps</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><circle cx="12" cy="12" r="6" fill="none" stroke="#F05032" stroke-width="2.5"/><circle cx="36" cy="36" r="6" fill="none" stroke="#F05032" stroke-width="2.5"/><circle cx="36" cy="12" r="6" fill="none" stroke="#F05032" stroke-width="2.5"/><line x1="12" y1="18" x2="12" y2="30" stroke="#F05032" stroke-width="2"/><path d="M12 30 Q12 42 24 42 Q36 42 36 30" stroke="#F05032" stroke-width="2" fill="none"/><line x1="36" y1="18" x2="36" y2="30" stroke="#F05032" stroke-width="2"/></svg>Git</div>
         </div>
       </div>
 
-      <div>
-        <div class="skill-cat-title">Linux &amp; Infrastructure</div>
-        <div class="skills-row">
-          <div class="skill-chip" data-tip="RHEL, Ubuntu — production server administration">
-            <svg class="skill-icon" viewBox="0 0 48 48"><ellipse cx="24" cy="16" rx="8" ry="10" fill="none" stroke="#FCC624" stroke-width="2.5"/><path d="M16 22 L12 30 L16 38 L24 42 L32 38 L36 30 L32 22" fill="none" stroke="#FCC624" stroke-width="2"/><circle cx="20" cy="16" r="2" fill="#FCC624"/><circle cx="28" cy="16" r="2" fill="#FCC624"/></svg>Linux
-          </div>
-          <div class="skill-chip" data-tip="VM provisioning, lifecycle management, vSAN storage">
-            <svg class="skill-icon" viewBox="0 0 48 48"><rect x="6" y="10" width="36" height="28" rx="3" fill="none" stroke="#607078" stroke-width="2.5"/><line x1="6" y1="20" x2="42" y2="20" stroke="#607078" stroke-width="1.5"/><circle cx="14" cy="15" r="2" fill="#607078"/><circle cx="22" cy="15" r="2" fill="#607078"/><text x="10" y="34" font-family="sans-serif" font-weight="900" font-size="11" fill="#607078">VMware</text></svg>VMware
-          </div>
-          <div class="skill-chip" data-tip="Enterprise storage, vSAN, resource management">
-            <svg class="skill-icon" viewBox="0 0 48 48"><rect x="8" y="12" width="32" height="8" rx="2" fill="none" stroke="#00AFF0" stroke-width="2"/><rect x="8" y="22" width="32" height="8" rx="2" fill="none" stroke="#00AFF0" stroke-width="2"/><rect x="8" y="32" width="32" height="8" rx="2" fill="none" stroke="#00AFF0" stroke-width="2"/><circle cx="36" cy="16" r="2" fill="#00AFF0"/><circle cx="36" cy="26" r="2" fill="#00AFF0"/><circle cx="36" cy="36" r="2" fill="#00AFF0"/></svg>NetApp
-          </div>
-          <div class="skill-chip" data-tip="AD objects, DNS, DHCP, GPO management">
-            <svg class="skill-icon" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" rx="4" fill="none" stroke="#00A4EF" stroke-width="2.5"/><line x1="8" y1="24" x2="40" y2="24" stroke="#00A4EF" stroke-width="1.5"/><line x1="24" y1="8" x2="24" y2="40" stroke="#00A4EF" stroke-width="1.5"/></svg>Active Directory
-          </div>
-          <div class="skill-chip" data-tip="Shell scripting, automation, system administration">
-            <svg class="skill-icon" viewBox="0 0 48 48"><rect x="4" y="8" width="40" height="32" rx="4" fill="none" stroke="#4EAA25" stroke-width="2"/><path d="M13 20 L19 26 L13 32" stroke="#4EAA25" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><line x1="22" y1="32" x2="34" y2="32" stroke="#4EAA25" stroke-width="2.5" stroke-linecap="round"/></svg>Bash
-          </div>
-          <div class="skill-chip" data-tip="Windows automation, scripting, admin tasks">
-            <svg class="skill-icon" viewBox="0 0 48 48"><rect x="6" y="10" width="36" height="28" rx="3" fill="none" stroke="#012456" stroke-width="2.5"/><text x="10" y="30" font-family="sans-serif" font-weight="900" font-size="13" fill="#5391FE">PS</text></svg>PowerShell
-          </div>
+      <!-- Linux & Infrastructure -->
+      <div class="skill-row">
+        <div class="sk-cat">
+          <div class="sk-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></div>
+          <div class="sk-name">Linux &amp;<br>Infrastructure</div>
+        </div>
+        <div class="sk-chips">
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><ellipse cx="24" cy="16" rx="8" ry="10" fill="none" stroke="#FCC624" stroke-width="2.5"/><path d="M16 22 L12 30 L16 38 L24 42 L32 38 L36 30 L32 22" fill="none" stroke="#FCC624" stroke-width="2"/><circle cx="20" cy="16" r="2" fill="#FCC624"/><circle cx="28" cy="16" r="2" fill="#FCC624"/></svg>Linux</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><rect x="6" y="10" width="36" height="28" rx="3" fill="none" stroke="#607078" stroke-width="2.5"/><line x1="6" y1="20" x2="42" y2="20" stroke="#607078" stroke-width="1.5"/><circle cx="14" cy="15" r="2" fill="#607078"/><circle cx="22" cy="15" r="2" fill="#607078"/></svg>VMware</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><rect x="8" y="12" width="32" height="8" rx="2" fill="none" stroke="#00AFF0" stroke-width="2"/><rect x="8" y="22" width="32" height="8" rx="2" fill="none" stroke="#00AFF0" stroke-width="2"/><rect x="8" y="32" width="32" height="8" rx="2" fill="none" stroke="#00AFF0" stroke-width="2"/><circle cx="36" cy="16" r="2" fill="#00AFF0"/><circle cx="36" cy="26" r="2" fill="#00AFF0"/><circle cx="36" cy="36" r="2" fill="#00AFF0"/></svg>NetApp</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><rect x="8" y="8" width="32" height="32" rx="4" fill="none" stroke="#00A4EF" stroke-width="2.5"/><line x1="8" y1="24" x2="40" y2="24" stroke="#00A4EF" stroke-width="1.5"/><line x1="24" y1="8" x2="24" y2="40" stroke="#00A4EF" stroke-width="1.5"/></svg>Active Directory</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><rect x="4" y="8" width="40" height="32" rx="4" fill="none" stroke="#4EAA25" stroke-width="2"/><path d="M13 20 L19 26 L13 32" stroke="#4EAA25" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><line x1="22" y1="32" x2="34" y2="32" stroke="#4EAA25" stroke-width="2.5" stroke-linecap="round"/></svg>Bash</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><rect x="6" y="10" width="36" height="28" rx="3" fill="none" stroke="#012456" stroke-width="2.5"/><text x="10" y="30" font-family="sans-serif" font-weight="900" font-size="13" fill="#5391FE">PS</text></svg>PowerShell</div>
         </div>
       </div>
 
-      <div>
-        <div class="skill-cat-title">Monitoring &amp; Observability</div>
-        <div class="skills-row">
-          <div class="skill-chip" data-tip="Metrics collection, alertmanager, PromQL">
-            <svg class="skill-icon" viewBox="0 0 48 48"><path d="M24 4 C18 4 8 14 8 26 C8 36 15 44 24 44 C33 44 40 36 40 26 C40 14 30 4 24 4Z" fill="none" stroke="#E6522C" stroke-width="2.5"/><path d="M18 32 L20 24 L24 14 L28 24 L30 32" fill="none" stroke="#E6522C" stroke-width="2" stroke-linejoin="round"/></svg>Prometheus
-          </div>
-          <div class="skill-chip" data-tip="Dashboards, alerting, data visualization">
-            <svg class="skill-icon" viewBox="0 0 48 48"><rect x="6" y="28" width="8" height="14" rx="2" fill="#F46800"/><rect x="16" y="20" width="8" height="22" rx="2" fill="#F46800"/><rect x="26" y="12" width="8" height="30" rx="2" fill="#F46800"/><rect x="36" y="6" width="8" height="36" rx="2" fill="#F46800"/></svg>Grafana
-          </div>
-          <div class="skill-chip" data-tip="Log aggregation, search, enterprise observability">
-            <svg class="skill-icon" viewBox="0 0 48 48"><path d="M8 24 Q8 10 24 10 Q40 10 40 24 Q40 38 24 38 Q8 38 8 24Z" fill="none" stroke="#FF5B39" stroke-width="2.5"/><path d="M16 24 Q16 16 24 16 Q32 16 32 24" fill="none" stroke="#FF5B39" stroke-width="2"/><circle cx="24" cy="28" r="3" fill="#FF5B39"/></svg>Splunk
-          </div>
-          <div class="skill-chip" data-tip="Windows infrastructure monitoring, alerting, SCOM">
-            <svg class="skill-icon" viewBox="0 0 48 48"><rect x="6" y="6" width="16" height="16" rx="2" fill="#00A4EF"/><rect x="26" y="6" width="16" height="16" rx="2" fill="#7FBA00"/><rect x="6" y="26" width="16" height="16" rx="2" fill="#FFB900"/><rect x="26" y="26" width="16" height="16" rx="2" fill="#F25022"/></svg>SCOM
-          </div>
+      <!-- Monitoring & Observability -->
+      <div class="skill-row">
+        <div class="sk-cat">
+          <div class="sk-ico"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <div class="sk-name">Monitoring &amp;<br>Observability</div>
+        </div>
+        <div class="sk-chips">
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><path d="M24 4 C18 4 8 14 8 26 C8 36 15 44 24 44 C33 44 40 36 40 26 C40 14 30 4 24 4Z" fill="none" stroke="#E6522C" stroke-width="2.5"/><path d="M18 32 L20 24 L24 14 L28 24 L30 32" fill="none" stroke="#E6522C" stroke-width="2" stroke-linejoin="round"/></svg>Prometheus</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><rect x="6" y="28" width="8" height="14" rx="2" fill="#F46800"/><rect x="16" y="20" width="8" height="22" rx="2" fill="#F46800"/><rect x="26" y="12" width="8" height="30" rx="2" fill="#F46800"/><rect x="36" y="6" width="8" height="36" rx="2" fill="#F46800"/></svg>Grafana</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><path d="M8 24 Q8 10 24 10 Q40 10 40 24 Q40 38 24 38 Q8 38 8 24Z" fill="none" stroke="#FF5B39" stroke-width="2.5"/><path d="M16 24 Q16 16 24 16 Q32 16 32 24" fill="none" stroke="#FF5B39" stroke-width="2"/><circle cx="24" cy="28" r="3" fill="#FF5B39"/></svg>Splunk</div>
+          <div class="chip"><svg viewBox="0 0 48 48" style="width:17px;height:17px"><rect x="6" y="6" width="16" height="16" rx="2" fill="#00A4EF"/><rect x="26" y="6" width="16" height="16" rx="2" fill="#7FBA00"/><rect x="6" y="26" width="16" height="16" rx="2" fill="#FFB900"/><rect x="26" y="26" width="16" height="16" rx="2" fill="#F25022"/></svg>SCOM</div>
         </div>
       </div>
 
@@ -708,58 +790,65 @@ footer{
 
 <!-- PIPELINE -->
 <section id="pipeline">
-  <div class="pipeline-wrap">
-    <div class="section-head reveal">
-      <h2 class="s-title">DevOps Pipeline</h2>
-      <div class="s-line"></div>
+  <div class="pipe-wrap">
+    <div class="section-head reveal" style="margin-bottom:0">
+      <div class="sec-label">Workflow</div>
+      <h2 class="sec-title">DevOps <span class="hi">Pipeline</span></h2>
+      <div class="sec-rule" style="margin-top:10px"></div>
     </div>
-    <div class="pipeline-track" id="pipe-track">
+    <div class="pipeline-row" id="pipe-track">
 
-      <div class="pipe-stage" data-stage="0">
-        <div class="pipe-hex">
-          <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <div class="ps" data-stage="0">
+        <div class="ps-hex">
+          <svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
-        <div class="pipe-label">Code</div>
+        <div class="ps-label">Code</div>
+        <div class="ps-sub">Commit · PR</div>
       </div>
-      <div class="pipe-connector" data-conn="0"></div>
+      <div class="pc" data-conn="0"></div>
 
-      <div class="pipe-stage" data-stage="1">
-        <div class="pipe-hex">
-          <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <div class="ps" data-stage="1">
+        <div class="ps-hex">
+          <svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
         </div>
-        <div class="pipe-label">Build</div>
+        <div class="ps-label">Build</div>
+        <div class="ps-sub">Docker · Helm</div>
       </div>
-      <div class="pipe-connector" data-conn="1"></div>
+      <div class="pc" data-conn="1"></div>
 
-      <div class="pipe-stage" data-stage="2">
-        <div class="pipe-hex">
-          <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      <div class="ps" data-stage="2">
+        <div class="ps-hex">
+          <svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <div class="pipe-label">Test</div>
+        <div class="ps-label">Test</div>
+        <div class="ps-sub">Unit · Integration</div>
       </div>
-      <div class="pipe-connector" data-conn="2"></div>
+      <div class="pc" data-conn="2"></div>
 
-      <div class="pipe-stage" data-stage="3">
-        <div class="pipe-hex">
-          <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2A19.79 19.79 0 0112 18.5a19.5 19.5 0 01-7.42-3.08M15 3h6v6M21 3L12 12"/></svg>
+      <div class="ps" data-stage="3">
+        <div class="ps-hex">
+          <svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2A19.79 19.79 0 0112 18.5a19.5 19.5 0 01-7.42-3.08M15 3h6v6M21 3L12 12"/></svg>
         </div>
-        <div class="pipe-label">Deploy</div>
+        <div class="ps-label">Deploy</div>
+        <div class="ps-sub">K8s · ArgoCD</div>
       </div>
-      <div class="pipe-connector" data-conn="3"></div>
+      <div class="pc" data-conn="3"></div>
 
-      <div class="pipe-stage" data-stage="4">
-        <div class="pipe-hex">
-          <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <div class="ps" data-stage="4">
+        <div class="ps-hex">
+          <svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
-        <div class="pipe-label">Monitor</div>
+        <div class="ps-label">Monitor</div>
+        <div class="ps-sub">Prometheus · Grafana</div>
       </div>
-      <div class="pipe-connector" data-conn="4"></div>
+      <div class="pc" data-conn="4"></div>
 
-      <div class="pipe-stage" data-stage="5">
-        <div class="pipe-hex">
-          <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+      <div class="ps" data-stage="5">
+        <div class="ps-hex">
+          <svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
         </div>
-        <div class="pipe-label">Feedback</div>
+        <div class="ps-label">Feedback</div>
+        <div class="ps-sub">Alert · Iterate</div>
       </div>
 
     </div>
@@ -769,25 +858,29 @@ footer{
 <!-- PROJECTS -->
 <section id="projects" class="section section-dark">
   <div class="container">
-    <div class="section-head reveal">
-      <div class="s-label">Selected Work</div>
-      <h2 class="s-title">Projects</h2>
-      <div class="s-line"></div>
+    <div class="section-head reveal" style="margin-bottom:52px">
+      <div class="sec-label">Selected Work</div>
+      <h2 class="sec-title"><span class="hi">Projects</span></h2>
+      <div class="sec-rule" style="margin-top:10px"></div>
     </div>
-    <div class="projects-grid">
-
-      <div class="project-card reveal" style="transition-delay:.06s">
-        <div class="project-glow"></div>
-        <div class="project-num">01 — AWS</div>
-        <div class="project-name">Personal Portfolio Platform</div>
-        <div class="project-desc">Full-stack cloud deployment of a personal portfolio website. Infrastructure provisioned with Terraform — S3 static hosting, CloudFront CDN, and ACM certificate. Releases are fully automated via AWS CodePipeline connected to the Git repo, pushing updates live on every merge with zero manual steps.</div>
-        <div class="project-stack">
-          <span class="stack-tag">Terraform</span><span class="stack-tag">AWS S3</span>
-          <span class="stack-tag">CloudFront</span><span class="stack-tag">CodePipeline</span>
-          <span class="stack-tag">GitOps</span><span class="stack-tag">HTML</span>
+    <div class="projects-grid reveal" style="transition-delay:.08s">
+      <div class="proj-card">
+        <div class="proj-card-head">
+          <div class="proj-num">#01</div>
+          <div class="proj-badge">AWS · Cloud</div>
         </div>
-        <div class="project-links">
-          <a class="proj-link" href="https://github.com/Peleg07/aws_personal_protfolio" target="_blank">
+        <div class="proj-name">Personal Portfolio Platform</div>
+        <div class="proj-desc">Full-stack website with full cloud infrastructure and an automated CI/CD pipeline. Built with AWS resources (S3, CloudFront, ACM) are provisioned with Terraform. Every push to main triggers AWS CodePipeline: CodeBuild validates and syncs the site to S3 bucket.</div>
+        <div class="proj-stack">
+          <span class="stk">Terraform</span>
+          <span class="stk">AWS S3</span>
+          <span class="stk">CloudFront</span>
+          <span class="stk">CodePipeline</span>
+          <span class="stk">GitOps</span>
+          <span class="stk">HTML / CSS</span>
+        </div>
+        <div class="proj-links">
+          <a class="plink" href="https://github.com/Peleg07/aws_personal_protfolio" target="_blank">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.21 11.39.6.11.82-.26.82-.57v-2.23c-3.34.73-4.04-1.42-4.04-1.42-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.11-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.3-1.55 3.3-1.23 3.3-1.23.65 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.57 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/></svg>
             GitHub
           </a>
@@ -797,84 +890,23 @@ footer{
   </div>
 </section>
 
-
-<!-- EXPERIENCE -->
-<!--
-<section id="experience" class="section">
-  <div class="container">
-    <div class="section-head reveal">
-      <div class="s-label">Career</div>
-      <h2 class="s-title">Work Experience</h2>
-      <div class="s-line"></div>
-    </div>
-    <div class="timeline reveal" style="transition-delay:.05s">
-      <div class="tl-line-wrap"><div class="tl-line-fill" id="tl-fill"></div></div>
-
-      <div class="tl-item tl-active">
-        <div class="tl-dot"></div>
-        <div class="tl-period">09/2023 — Present</div>
-        <div class="tl-role">DevOps Engineer</div>
-        <div class="tl-company">Unitask Group</div>
-        <ul class="tl-bullets">
-          <li>Deploy and orchestrate containerized enterprise applications using Docker, Kubernetes, and OpenShift in production environments</li>
-          <li>Design, automate, and maintain CI/CD pipelines using Jenkins, Ansible, Azure DevOps, and ArgoCD</li>
-          <li>Implement GitOps workflows and Helm-based deployments to improve deployment consistency and operational efficiency</li>
-          <li>Manage VMware infrastructure environments, including VM provisioning and lifecycle management across multiple sites</li>
-          <li>Monitor infrastructure and application health using Prometheus, Grafana, and Splunk for observability and reliability</li>
-        </ul>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-period">09/2020 — 08/2023</div>
-        <div class="tl-role">Linux Engineer</div>
-        <div class="tl-company">Unitask Group</div>
-        <ul class="tl-bullets">
-          <li>Managed and maintained hosts and servers across production, staging, and pre-production enterprise environments</li>
-          <li>Administered enterprise storage solutions including NetApp and VMware vSAN, improving infrastructure stability</li>
-          <li>Designed and implemented Ansible playbooks and Jenkins automation workflows for server provisioning and configuration management</li>
-          <li>Managed Active Directory objects, DNS configurations, and enforced Group Policy (GPO) settings</li>
-        </ul>
-      </div>
-
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <div class="tl-period">Until 09/2020</div>
-        <div class="tl-role">System Administrator</div>
-        <div class="tl-company">Prime Minister Office</div>
-        <ul class="tl-bullets">
-          <li>Manageddd and maintained Linux and Windows server infrastructures across multiple enterprise environments</li>
-          <li>Performed backup and disaster recovery operations using VEEAM to ensure infrastructure resilience and data availability</li>
-          <li>Monitored infrastructure and system health using SCOM including alerting, dashboards, and performance monitoring</li>
-          <li>Managed and configured Cisco and Juniper network devices to support reliable network connectivity</li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
-</section>
--->
-
 <!-- CONTACT -->
-<section id="contact" class="section section-dark">
+<section id="contact" class="section">
   <div class="container">
-    <div class="section-head reveal">
-      <div class="s-label">Get In Touch</div>
-      <h2 class="s-title">Let's build something great.</h2>
-      <div class="s-line"></div>
-    </div>
-    <div class="contact-inner reveal" style="transition-delay:.08s">
-      <div class="avail-badge"><div class="avail-dot"></div>Available to new opportunities</div>
-      <div class="contact-socials">
-        <a class="social-btn" href="mailto:peleg07@gmail.com">
+    <div class="contact-center reveal">
+      <div class="av-badge"><div class="av-badge-dot"></div>Available to new opportunities</div>
+      <h2 class="contact-heading">Let's build something <span>great.</span></h2>
+      <p class="contact-sub">Open to DevOps, Platform Engineering, and SRE roles. Whether it's a full-time position or a consulting engagement — let's talk infrastructure.</p>
+      <div class="socials">
+        <a class="soc" href="mailto:peleg07@gmail.com">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           peleg07@gmail.com
         </a>
-        <a class="social-btn" href="https://github.com/Peleg07" target="_blank">
+        <a class="soc" href="https://github.com/Peleg07" target="_blank">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.21 11.39.6.11.82-.26.82-.57v-2.23c-3.34.73-4.04-1.42-4.04-1.42-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.11-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.3-1.55 3.3-1.23 3.3-1.23.65 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.57 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/></svg>
           GitHub
         </a>
-        <a class="social-btn" href="https://linkedin.com/in/peleg-levy" target="_blank">
+        <a class="soc" href="https://linkedin.com/in/peleg-levy" target="_blank">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
           LinkedIn
         </a>
@@ -884,106 +916,119 @@ footer{
 </section>
 
 <footer>
-  <div class="foot-logo">Peleg Levy.</div>
-  <div class="foot-copy">© 2026 Peleg Levy · All rights reserved</div>
+  <div class="foot-brand">Peleg Levy</div>
+  <div class="foot-copy">© 2026 · All rights reserved</div>
 </footer>
 
 <script>
-// ── Particle Canvas ───────────────────────────────────────────────
-const canvas = document.getElementById('particle-canvas');
-const ctx = canvas.getContext('2d');
-let W, H, particles = [], mouse = {x:-9999,y:-9999};
-const COUNT = 80, MAX_DIST = 130, SPEED = 0.4;
+// ── Custom Cursor ─────────────────────────────────────────────────────
+const cur=document.getElementById('cur'), cur2=document.getElementById('cur2');
+let mx=0,my=0,cx2=0,cy2=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+});
+function animCursor(){
+  cx2+=(mx-cx2)*.12; cy2+=(my-cy2)*.12;
+  cur2.style.left=cx2+'px';cur2.style.top=cy2+'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+document.querySelectorAll('a,button,.chip,.cat-card,.proj-card,.soc,.sc-row').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(2)';cur2.style.transform='translate(-50%,-50%) scale(1.4)'});
+  el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';cur2.style.transform='translate(-50%,-50%) scale(1)'});
+});
 
-function resize(){
-  W = canvas.width = canvas.offsetWidth;
-  H = canvas.height = canvas.offsetHeight;
+// ── K8s Topology Canvas ───────────────────────────────────────────────
+const canvas=document.getElementById('topo-canvas');
+const ctx=canvas.getContext('2d');
+let W,H,nodes=[];
+const NODE_COUNT=55, CONNECT_DIST=140;
+const COLS=['rgba(59,130,246,','rgba(6,182,212,','rgba(124,58,237,'];
+
+function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
+
+class Node{
+  constructor(){
+    this.x=Math.random()*W; this.y=Math.random()*H;
+    this.vx=(Math.random()-.5)*.28; this.vy=(Math.random()-.5)*.28;
+    this.r=Math.random()*2.2+1;
+    this.col=COLS[Math.floor(Math.random()*COLS.length)];
+    this.phase=Math.random()*Math.PI*2;
+    // Traveling packets on this node's edges
+    this.packets=[];
+  }
+  update(t){
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<0||this.x>W)this.vx*=-1;
+    if(this.y<0||this.y>H)this.vy*=-1;
+  }
+  draw(t){
+    const pulse=.55+.45*Math.sin(t*.0012+this.phase);
+    // Outer glow
+    const g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r*5);
+    g.addColorStop(0,this.col+(pulse*.12)+')');
+    g.addColorStop(1,this.col+'0)');
+    ctx.beginPath();ctx.arc(this.x,this.y,this.r*5,0,Math.PI*2);
+    ctx.fillStyle=g;ctx.fill();
+    // Core
+    ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle=this.col+(pulse*.8)+')';ctx.fill();
+  }
 }
-function Particle(){
-  this.x = Math.random()*W;
-  this.y = Math.random()*H;
-  this.vx = (Math.random()-.5)*SPEED;
-  this.vy = (Math.random()-.5)*SPEED;
-  this.r = Math.random()*2+1;
-  this.alpha = Math.random()*.5+.2;
+
+function initNodes(){nodes=[];for(let i=0;i<NODE_COUNT;i++)nodes.push(new Node());}
+
+// Packet system
+const packets=[];
+function maybeSpawnPacket(a,b){
+  if(Math.random()<.0008)packets.push({ax:a.x,ay:a.y,bx:b.x,by:b.y,t:0,col:a.col});
 }
-function initParticles(){
-  particles = [];
-  for(let i=0;i<COUNT;i++) particles.push(new Particle());
-}
-function drawParticles(){
+
+function drawFrame(ts){
   ctx.clearRect(0,0,W,H);
-  particles.forEach(p=>{
-    p.x+=p.vx; p.y+=p.vy;
-    if(p.x<0||p.x>W) p.vx*=-1;
-    if(p.y<0||p.y>H) p.vy*=-1;
-    // Mouse repel
-    const dx=p.x-mouse.x, dy=p.y-mouse.y, d=Math.sqrt(dx*dx+dy*dy);
-    if(d<100){p.x+=dx/d*1.5;p.y+=dy/d*1.5}
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle=`rgba(0,180,255,${p.alpha})`;
-    ctx.fill();
-  });
-  // Lines
-  for(let i=0;i<particles.length;i++){
-    for(let j=i+1;j<particles.length;j++){
-      const a=particles[i],b=particles[j];
-      const dx=a.x-b.x, dy=a.y-b.y;
-      const d=Math.sqrt(dx*dx+dy*dy);
-      if(d<MAX_DIST){
-        ctx.beginPath();
-        ctx.moveTo(a.x,a.y);
-        ctx.lineTo(b.x,b.y);
-        ctx.strokeStyle=`rgba(0,150,255,${(.6-d/MAX_DIST)*.25})`;
-        ctx.lineWidth=1;
-        ctx.stroke();
+  // Update nodes
+  nodes.forEach(n=>n.update(ts));
+  // Draw connections + spawn packets
+  for(let i=0;i<nodes.length;i++){
+    for(let j=i+1;j<nodes.length;j++){
+      const a=nodes[i],b=nodes[j];
+      const dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<CONNECT_DIST){
+        const alpha=(.5-d/CONNECT_DIST)*.18;
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=`rgba(59,130,246,${alpha})`;
+        ctx.lineWidth=.8;ctx.stroke();
+        maybeSpawnPacket(a,b);
       }
     }
   }
-  requestAnimationFrame(drawParticles);
-}
-window.addEventListener('resize',()=>{resize();initParticles()});
-document.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
-resize(); initParticles(); drawParticles();
-
-// ── Typed Effect ──────────────────────────────────────────────────
-const titles = ['DevOps Engineer'];
-let ti=0, ci=0, deleting=false;
-const el = document.getElementById('typed-text');
-function type(){
-  const word = titles[ti];
-  if(!deleting){
-    el.textContent = word.slice(0,++ci);
-    if(ci===word.length){ deleting=true; setTimeout(type,2200); return; }
-    setTimeout(type, 70+Math.random()*40);
-  } else {
-    el.textContent = word.slice(0,--ci);
-    if(ci===0){ deleting=false; ti=(ti+1)%titles.length; setTimeout(type,400); return; }
-    setTimeout(type,38);
+  // Draw nodes
+  nodes.forEach(n=>n.draw(ts));
+  // Animate packets
+  for(let i=packets.length-1;i>=0;i--){
+    const p=packets[i];
+    p.t+=.018;
+    if(p.t>1){packets.splice(i,1);continue;}
+    const x=p.ax+(p.bx-p.ax)*p.t;
+    const y=p.ay+(p.by-p.ay)*p.t;
+    ctx.beginPath();ctx.arc(x,y,2.5,0,Math.PI*2);
+    ctx.fillStyle=p.col+'0.9)';ctx.fill();
+    // Tail
+    ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);
+    ctx.fillStyle=p.col+'0.2)';ctx.fill();
   }
+  requestAnimationFrame(drawFrame);
 }
-setTimeout(type,800);
+window.addEventListener('resize',()=>{resize();initNodes();});
+resize();initNodes();requestAnimationFrame(drawFrame);
 
-// ── Nav ───────────────────────────────────────────────────────────
+// ── Nav ───────────────────────────────────────────────────────────────
 const nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60));
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>55));
 const secs=[...document.querySelectorAll('section[id]')];
 const nls=[...document.querySelectorAll('.nav-links a[href^="#"]')];
-new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      nls.forEach(a=>a.classList.remove('active'));
-      const a=document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
-      if(a)a.classList.add('active');
-    }
-  });
-},{rootMargin:'-35% 0px -60% 0px'}).observe(...secs.map(s=>{
-  // Can't spread into observe, do it right:
-  return s;
-}));
-// Fix: observe each section
-const navObs = new IntersectionObserver(entries=>{
+const navObs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting){
       nls.forEach(a=>a.classList.remove('active'));
@@ -994,90 +1039,68 @@ const navObs = new IntersectionObserver(entries=>{
 },{rootMargin:'-35% 0px -60% 0px'});
 secs.forEach(s=>navObs.observe(s));
 
-// ── Scroll Reveal ─────────────────────────────────────────────────
-const revEls=document.querySelectorAll('.reveal,.reveal-l,.reveal-r');
+// ── Scroll Reveal ─────────────────────────────────────────────────────
 const revObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');revObs.unobserve(e.target)}});
-},{threshold:.1});
-revEls.forEach(el=>revObs.observe(el));
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');revObs.unobserve(e.target);}});
+},{threshold:.08});
+document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>revObs.observe(el));
 
-// ── Count-up ──────────────────────────────────────────────────────
-function countUp(el,target,suffix,dur=1600){
-  const start=performance.now();
-  const update=now=>{
-    const p=Math.min((now-start)/dur,1);
-    const ease=1-Math.pow(1-p,4);
-    el.innerHTML=Math.floor(ease*target)+'<span>'+suffix+'</span>';
-    if(p<1) requestAnimationFrame(update);
-  };
-  requestAnimationFrame(update);
-}
-const statObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      const t=+e.target.dataset.target, s=e.target.dataset.suffix||'';
-      countUp(e.target,t,s);
-      statObs.unobserve(e.target);
-    }
-  });
-},{threshold:.5});
-document.querySelectorAll('.stat-num[data-target]').forEach(el=>statObs.observe(el));
 
-// ── Timeline line draw ────────────────────────────────────────────
-const tlFill=document.getElementById('tl-fill');
-const tlObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      tlFill.style.height='100%';
-      tlObs.unobserve(e.target);
-    }
-  });
-},{threshold:.2});
-if(tlFill) tlObs.observe(tlFill.parentElement);
-
-// ── Pipeline Animation ────────────────────────────────────────────
-const stages=document.querySelectorAll('.pipe-stage');
-const conns=document.querySelectorAll('.pipe-connector');
-let pipeIdx=0;
+// ── Pipeline ──────────────────────────────────────────────────────────
+const stages=document.querySelectorAll('.ps');
+const conns=document.querySelectorAll('.pc');
+let pIdx=0,pRunning=false;
 function pipeStep(){
   stages.forEach(s=>s.classList.remove('active'));
-  conns.forEach(c=>{c.classList.remove('flowing');void c.offsetWidth});
-  stages[pipeIdx].classList.add('active');
-  if(pipeIdx<conns.length){
-    setTimeout(()=>{
-      if(conns[pipeIdx]) conns[pipeIdx].classList.add('flowing');
-    },700);
-  }
-  pipeIdx=(pipeIdx+1)%stages.length;
-  setTimeout(pipeStep, pipeIdx===0 ? 1200 : 1000);
+  conns.forEach(c=>{c.classList.remove('flowing');void c.offsetWidth;});
+  stages[pIdx].classList.add('active');
+  for(let i=0;i<pIdx;i++)stages[i].classList.add('done');
+  if(pIdx<conns.length){setTimeout(()=>{if(conns[pIdx])conns[pIdx].classList.add('flowing');},600);}
+  pIdx++;
+  if(pIdx<stages.length){setTimeout(pipeStep,1000);}
+  else{setTimeout(()=>{pIdx=0;stages.forEach(s=>s.classList.remove('active','done'));setTimeout(pipeStep,500);},2000);}
 }
 const pipeObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){pipeStep();pipeObs.unobserve(e.target)}
-  });
+  entries.forEach(e=>{if(e.isIntersecting&&!pRunning){pRunning=true;pipeStep();pipeObs.unobserve(e.target);}});
 },{threshold:.3});
-const pipeTrack=document.getElementById('pipe-track');
-if(pipeTrack) pipeObs.observe(pipeTrack);
+const pt=document.getElementById('pipe-track');
+if(pt)pipeObs.observe(pt);
 
-// ── Mobile Nav ────────────────────────────────────────────────────
+// ── Typed Text ────────────────────────────────────────────────────────
+const typedEl=document.getElementById('typed-text');
+const typedWords=['DevOps Engineer.'];
+let tw=0,tc=0,tDel=false;
+function typeStep(){
+  if(!typedEl)return;
+  const word=typedWords[tw];
+  if(!tDel){
+    typedEl.textContent=word.slice(0,++tc);
+    if(tc===word.length){tDel=true;setTimeout(typeStep,2000);return;}
+    setTimeout(typeStep,70+Math.random()*45);
+  } else {
+    typedEl.textContent=word.slice(0,--tc);
+    if(tc===0){tDel=false;tw=(tw+1)%typedWords.length;setTimeout(typeStep,350);return;}
+    setTimeout(typeStep,35);
+  }
+}
+setTimeout(typeStep,800);
+
+// ── Mobile Nav ────────────────────────────────────────────────────────
 const ham=document.getElementById('hamburger');
 const mob=document.getElementById('mobile-menu');
 ham.addEventListener('click',()=>mob.classList.toggle('open'));
-function closeMobile(){mob.classList.remove('open')}
+function closeMobile(){mob.classList.remove('open');}
 
-// ── Disable right-click, text selection, and DevTools shortcuts ──
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('selectstart', e => e.preventDefault());
-document.addEventListener('copy', e => e.preventDefault());
-document.addEventListener('keydown', e => {
-  // F12
-  if (e.key === 'F12') { e.preventDefault(); return; }
-  const ctrl = e.ctrlKey || e.metaKey;
-  const shift = e.shiftKey;
-  if (ctrl && e.key === 'u') { e.preventDefault(); return; }           // View source
-  if (ctrl && shift && ['i','I','j','J','c','C'].includes(e.key)) { e.preventDefault(); return; } // DevTools
-  if (ctrl && e.key === 'c') { e.preventDefault(); return; }           // Copy
-  if (ctrl && e.key === 'a') { e.preventDefault(); return; }           // Select all
+// ── Security ──────────────────────────────────────────────────────────
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('selectstart',e=>e.preventDefault());
+document.addEventListener('copy',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+  if(e.key==='F12'){e.preventDefault();return;}
+  const c=e.ctrlKey||e.metaKey,s=e.shiftKey;
+  if(c&&e.key==='u'){e.preventDefault();return;}
+  if(c&&s&&['i','I','j','J','c','C'].includes(e.key)){e.preventDefault();return;}
+  if(c&&['c','a'].includes(e.key)){e.preventDefault();}
 });
 </script>
 </body>
